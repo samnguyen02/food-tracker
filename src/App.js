@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FoodTracker.css';
 
 const FoodTracker = () => {
@@ -10,11 +10,36 @@ const FoodTracker = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRating, setFilterRating] = useState(0);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [pickerMode, setPickerMode] = useState('discover'); // 'discover' or 'favorites'
+  const [pickerMode, setPickerMode] = useState('discover');
+
+  // 🔄 LOAD DATA: When component first mounts, try to load saved foods
+  useEffect(() => {
+    console.log('🔍 Checking for saved foods...');
+    const savedFoods = localStorage.getItem('foodTrackerFoods');
+    
+    if (savedFoods) {
+      try {
+        const parsedFoods = JSON.parse(savedFoods);
+        console.log('✅ Found saved foods:', parsedFoods.length, 'items');
+        setFoods(parsedFoods);
+      } catch (error) {
+        console.error('❌ Error loading saved foods:', error);
+        // If corrupted data, start fresh
+        localStorage.removeItem('foodTrackerFoods');
+      }
+    } else {
+      console.log('📝 No saved foods found, starting fresh');
+    }
+  }, []); // Empty array = run once when component mounts
+
+  // 💾 SAVE DATA: Whenever foods array changes, save to localStorage
+  useEffect(() => {
+    console.log('💾 Saving foods to localStorage:', foods.length, 'items');
+    localStorage.setItem('foodTrackerFoods', JSON.stringify(foods));
+  }, [foods]); // [foods] = run whenever foods array changes
 
   const pickRandomFood = () => {
     if (pickerMode === 'discover') {
-      // DISCOVER MODE: Pick from unrated foods only
       const unratedFoods = foods.filter(food => !food.rating);
       
       if (unratedFoods.length === 0) {
@@ -35,7 +60,6 @@ const FoodTracker = () => {
       }, 2000);
       
     } else {
-      // FAVORITES MODE: Pick from rated foods with weighting
       const ratedFoods = foods.filter(food => food.rating);
       
       if (ratedFoods.length === 0) {
@@ -48,7 +72,6 @@ const FoodTracker = () => {
       setShowRating(false);
       
       setTimeout(() => {
-        // Build weighted array based on ratings
         const weightedFoods = [];
         ratedFoods.forEach(food => {
           const weight = food.rating || 1;
@@ -61,7 +84,6 @@ const FoodTracker = () => {
         const selectedFood = weightedFoods[randomIndex];
         setCurrentFood(selectedFood);
         setIsSpinning(false);
-        // Don't show rating in favorites mode - already rated!
         setShowRating(false);
       }, 2000);
     }
@@ -77,6 +99,7 @@ const FoodTracker = () => {
         dateAdded: new Date().toLocaleDateString(),
         tried: false
       };
+      // This triggers the useEffect to save data automatically
       setFoods([...foods, food]);
       setNewFood('');
       setShowAddForm(false);
@@ -85,6 +108,7 @@ const FoodTracker = () => {
 
   const rateFood = (rating) => {
     if (currentFood) {
+      // This triggers the useEffect to save data automatically
       setFoods(foods.map(food => 
         food.id === currentFood.id 
           ? { ...food, rating: rating, weight: rating, tried: true }
@@ -96,13 +120,24 @@ const FoodTracker = () => {
   };
 
   const deleteFood = (id) => {
+    // This triggers the useEffect to save data automatically
     setFoods(foods.filter(food => food.id !== id));
   };
 
   const toggleTried = (id) => {
+    // This triggers the useEffect to save data automatically
     setFoods(foods.map(food => 
       food.id === id ? { ...food, tried: !food.tried } : food
     ));
+  };
+
+  // Clear all data (for testing purposes)
+  const clearAllData = () => {
+    if (window.confirm('Are you sure you want to delete all your food data? This cannot be undone!')) {
+      localStorage.removeItem('foodTrackerFoods');
+      setFoods([]);
+      console.log('🗑️ All data cleared');
+    }
   };
 
   const filteredFoods = foods.filter(food => {
@@ -129,6 +164,12 @@ const FoodTracker = () => {
           <p className="subtitle">
             Save those TikTok food ideas and let fate decide your next meal!
           </p>
+          <div className="storage-info">
+            💾 Your data is saved locally on this device
+            <button onClick={clearAllData} className="clear-data-btn">
+              🗑️ Clear All Data
+            </button>
+          </div>
         </div>
 
         {/* Stats Bar */}
