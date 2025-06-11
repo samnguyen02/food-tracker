@@ -79,6 +79,8 @@ const FoodTracker = () => {
             weightedFoods.push(food);
           }
         });
+
+        const shuffledWeightedFoods = shuffleArray(weightedFoods);
         
         const randomIndex = Math.floor(Math.random() * weightedFoods.length);
         const selectedFood = weightedFoods[randomIndex];
