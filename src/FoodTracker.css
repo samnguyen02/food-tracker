@@ -106,9 +106,35 @@ body {
 }
 
 .subtitle {
-  margin: 0;
+  margin: 0 0 15px 0;
   font-size: 1.1rem;
   opacity: 0.9;
+}
+
+.storage-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+.clear-data-btn {
+  padding: 5px 10px;
+  background-color: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.clear-data-btn:hover {
+  background-color: rgba(255,255,255,0.3);
+  transform: scale(1.05);
 }
 
 /* Stats Container */
@@ -139,6 +165,11 @@ body {
 .stat-label {
   font-size: 0.9rem;
   color: var(--medium-gray);
+}
+
+/* Content Padding */
+.content {
+  padding: 30px;
 }
 
 /* Mode Selector */
@@ -211,43 +242,6 @@ body {
   opacity: 0.9;
 }
 
-/* Picker Section Updates */
-.picker-mode-info {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: var(--medium-gray);
-  font-style: italic;
-}
-
-/* Current Food Updates */
-.current-food-rating {
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
-
-.favorites-actions {
-  animation: slideIn 0.3s ease-out 0.2s both;
-}
-
-.close-button {
-  padding: 10px 20px;
-  background-color: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  color: var(--white);
-  font-weight: bold;
-  transition: all 0.3s ease;
-  margin-top: 10px;
-}
-
-.close-button:hover {
-  background-color: rgba(255,255,255,0.3);
-  transform: scale(1.05);
-}
-
 /* Picker Section */
 .picker-section {
   text-align: center;
@@ -280,6 +274,14 @@ body {
   background: #ccc;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+/* Picker Section Updates */
+.picker-mode-info {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+  font-style: italic;
 }
 
 /* Current Food Display */
@@ -338,6 +340,35 @@ body {
 .rating-button:hover {
   background-color: rgba(255,255,255,0.3);
   transform: scale(1.1);
+}
+
+/* Current Food Updates */
+.current-food-rating {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.favorites-actions {
+  animation: slideIn 0.3s ease-out 0.2s both;
+}
+
+.close-button {
+  padding: 10px 20px;
+  background-color: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  color: var(--white);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.close-button:hover {
+  background-color: rgba(255,255,255,0.3);
+  transform: scale(1.05);
 }
 
 /* Add Section */
@@ -597,6 +628,11 @@ body {
   
   .title {
     font-size: 2rem;
+  }
+  
+  .storage-info {
+    flex-direction: column;
+    gap: 8px;
   }
   
   .picker-button {
